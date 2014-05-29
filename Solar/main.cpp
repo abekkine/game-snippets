@@ -7,6 +7,7 @@ unsigned int step_mode = 0;
 unsigned int step_go = 0;
 unsigned int drop_tail = 0;
 int selected_planet = 0;
+int pov_planet = 0;
 
 void idle() {
 
@@ -43,6 +44,10 @@ void keyboard(unsigned char key, int x, int y) {
 
         case 's':
             step_mode ^= 1;
+            break;
+
+        case 'v':
+            pov_planet ^= 1;
             break;
 
         case 'p':

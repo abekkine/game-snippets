@@ -9,7 +9,7 @@ extern unsigned int step_go;
 double G = 1.0;
 Object sun;
 Object planet[1];
-double dt = 1.0;
+double dt = 0.5;
 extern int selected_planet;
 
 void model_init() {
@@ -88,9 +88,8 @@ void model_update() {
             angle = atan2(dy, dx) * 180 / M_PI;
             if( angle < 0.0 && angle >= -180.0 ) {
                 angle += 360.0;
-            }
-                
-            printf("%.1f\n", angle);
-        }
+            }             
+            printf("a(% 3.0f)\n", angle);
+        } 
     }
 }
