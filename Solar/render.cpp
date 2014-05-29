@@ -12,17 +12,18 @@ extern int pov_planet;
 
 void render() {
 
+    glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
 
     if( pov_planet ) {
-
+        // Apply reverse transforms to obtain point of view according to selected planet.
+        glRotated(planet[selected_planet].a, 0.0, 0.0, -1.0);
         glTranslated( -planet[selected_planet].x, -planet[selected_planet].y, 0.0 );
-        //glRotated(0.0, 0.0, 0.0, 1.0);
     }
 
     glColor3f(1.0, 1.0, 1.0);
-    drawPlanet(sun.x, sun.y, true);
+    drawPlanet(sun.x, sun.y, sun.a, true);
     for(int i=0; i<NUM_PLANETS; i++) {
         if( i==selected_planet ) {
             glColor3f(1.0, 0.0, 0.0);
@@ -30,17 +31,25 @@ void render() {
         else {
             glColor3f(1.0, 1.0, 1.0);
         }
-        drawPlanet(planet[i].x, planet[i].y, false);
+        drawPlanet(planet[i].x, planet[i].y, planet[i].a, false);
     }
 
     glPopMatrix();
 }
 
-void drawPlanet(double x, double y, bool sun) {
+void drawPlanet(double x, double y, double angle, bool sun) {
 
     const double R = 10.0;
     double a, px, py;
-    
+  
+    glMatrixMode(GL_MODELVIEW); 
+    glPushMatrix();
+
+    glTranslated(x, y, 0.0);
+    // Rotate planet/sun, etc.
+    glRotated(angle, 0.0, 0.0, 1.0);
+    angle = angle;
+ 
     if( sun ) {
         glBegin(GL_POLYGON);
     }
@@ -48,8 +57,8 @@ void drawPlanet(double x, double y, bool sun) {
         glBegin(GL_LINE_LOOP);
     }
     for(a=0.0; a<2.0*M_PI; a+=0.1) {
-        px = x + R * cos( a );
-        py = y + R * sin( a );
+        px = R * cos( a );
+        py = R * sin( a );
 
         glVertex2d(px, py);
     }
@@ -64,14 +73,16 @@ void drawPlanet(double x, double y, bool sun) {
         glPointSize(1.0);
     }
     glBegin(GL_POINTS);
-        glVertex2d(x + 0.5*R, y);
+        glVertex2d(0.5*R, 0.0);
     glEnd();
 
     // Place a line at 90 degree
     if( ! sun ) {
         glBegin(GL_LINES);
-            glVertex2d(x, y+R);
-            glVertex2d(x, y+1.5*R);
+            glVertex2d(0.0, R);
+            glVertex2d(0.0, 1.5*R);
         glEnd();
     }
+
+    glPopMatrix();
 }

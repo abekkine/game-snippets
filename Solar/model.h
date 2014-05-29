@@ -5,9 +5,17 @@
 
 typedef struct {
 
+    // Position
     double x, y;
+    // Velocity
     double vx, vy;
+    // Acceleration
     double ax, ay;
+    // Angle
+    double a;
+    // Angular velocity
+    double w;
+    // Mass
     double m;
 
 } Object;

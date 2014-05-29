@@ -9,7 +9,7 @@ extern unsigned int step_go;
 double G = 1.0;
 Object sun;
 Object planet[1];
-double dt = 0.5;
+double dt = 0.01;
 extern int selected_planet;
 
 void model_init() {
@@ -22,6 +22,8 @@ void model_init() {
     sun.vy = 0.0;
     sun.ax = 0.0;
     sun.ay = 0.0;
+    sun.a = 0.0;
+    sun.w = 3.0;
 
     // Initialize planets.
     // Planet #0
@@ -32,6 +34,8 @@ void model_init() {
     planet[0].vy = -3.0;
     planet[0].ax = 0.0;
     planet[0].ay = 0.0;
+    planet[0].a = 0.0;
+    planet[0].w = 2.5;
 
     // Planet #1
     planet[1].x = 200.0;
@@ -41,6 +45,8 @@ void model_init() {
     planet[1].vy = -2.0;
     planet[1].ax = 0.0;
     planet[1].ay = 0.0;
+    planet[1].a = 30.0;
+    planet[1].w = 8.0;
 
     // Planet #2
     planet[2].x = -300.0;
@@ -50,6 +56,8 @@ void model_init() {
     planet[2].vy = 2.0;
     planet[2].ax = 0.0;
     planet[2].ay = 0.0;
+    planet[2].a = 50.0;
+    planet[2].w = 1.0;
 }
 
 void model_update() {
@@ -81,8 +89,9 @@ void model_update() {
         planet[i].x += planet[i].vx * dt;
         planet[i].y += planet[i].vy * dt;
 
-        //DEBUG
-        //printf("%.2f, %.2f\n", planet[i].x, planet[i].y);
+        // update angle
+        planet[i].a += planet[i].w * dt;
+
         if( i==selected_planet ) {
             double angle;
             angle = atan2(dy, dx) * 180 / M_PI;
