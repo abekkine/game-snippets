@@ -8,10 +8,11 @@ unsigned int step_go = 0;
 unsigned int drop_tail = 0;
 int selected_planet = 0;
 int pov_planet = 0;
+GLfloat light_position[4];
 
 void idle() {
 
-	// TODO : For any background tasks.
+	// Background tasks.
     model_update();
 }
 
@@ -29,7 +30,7 @@ void display(void) {
 
 void keyboard(unsigned char key, int x, int y) {
 
-	// TODO : To process standard keys.
+	// Process standard keys.
 	x = x;
 	y = y;
 	switch(key) {
@@ -104,6 +105,30 @@ void mouse(int button, int state, int x, int y) {
 
 void init(void) {
 
+	// Simple lighting setup.
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat mat_diffuse[] = { 0.5, 0.5, 0.5, 1.0 };
+	GLfloat mat_shininess[] = { 50 };
+	light_position[0] = 0.0;
+	light_position[1] = 0.0;
+	light_position[2] = 0.0;
+	light_position[3] = 1.0;
+
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_SMOOTH);
+
+	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+	glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
+	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_DEPTH_TEST);
+
+	glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -117,8 +142,6 @@ void init(void) {
 	glutMotionFunc(motion);
 	glutMouseFunc(mouse);
 
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-
     model_init();
 }
 
@@ -127,11 +150,8 @@ int main(int argc, char** argv) {
 	glutInit(&argc, argv);
 
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-
 	glutInitWindowSize(800, 800);
-
 	glutInitWindowPosition(10, 10);
-
 	glutCreateWindow("Glut Window for SVG Rendering");
 
 	init();

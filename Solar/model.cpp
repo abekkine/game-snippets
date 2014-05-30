@@ -9,7 +9,7 @@ extern unsigned int step_go;
 double G = 1.0;
 Object sun;
 Object planet[1];
-double dt = 0.01;
+double dt = 0.1;
 extern int selected_planet;
 
 void model_init() {

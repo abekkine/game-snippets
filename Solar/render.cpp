@@ -9,6 +9,7 @@ extern Object sun;
 extern Object planet[1];
 extern int selected_planet;
 extern int pov_planet;
+extern GLfloat light_position[4];
 
 void render() {
 
@@ -22,8 +23,12 @@ void render() {
         glTranslated( -planet[selected_planet].x, -planet[selected_planet].y, 0.0 );
     }
 
+    // Needed to refresh light position after matrix operations.
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
     glColor3f(1.0, 1.0, 1.0);
     drawPlanet(sun.x, sun.y, sun.a, true);
+
     for(int i=0; i<NUM_PLANETS; i++) {
         if( i==selected_planet ) {
             glColor3f(1.0, 0.0, 0.0);
@@ -60,6 +65,7 @@ void drawPlanet(double x, double y, double angle, bool sun) {
         px = R * cos( a );
         py = R * sin( a );
 
+        glNormal3d(px/R, py/R, 0.0);
         glVertex2d(px, py);
     }
     glEnd();
@@ -73,13 +79,16 @@ void drawPlanet(double x, double y, double angle, bool sun) {
         glPointSize(1.0);
     }
     glBegin(GL_POINTS);
+        glNormal3d(1.0, 0.0, 0.0);
         glVertex2d(0.5*R, 0.0);
     glEnd();
 
     // Place a line at 90 degree
     if( ! sun ) {
         glBegin(GL_LINES);
+            glNormal3d(0.0, 1.0, 0.0);
             glVertex2d(0.0, R);
+            glNormal3d(0.0, 1.0, 0.0);
             glVertex2d(0.0, 1.5*R);
         glEnd();
     }
