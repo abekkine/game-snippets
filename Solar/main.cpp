@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <GL/glut.h>
 
 #include "render.h"
@@ -9,6 +10,9 @@ unsigned int drop_tail = 0;
 int selected_planet = 0;
 int pov_planet = 0;
 GLfloat light_position[4];
+
+//DEBUG
+double factor=1.0;
 
 void idle() {
 
@@ -75,7 +79,7 @@ void reshape(int width, int height) {
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(-500.0, 500.0, -500.0, 500.0);
+	gluOrtho2D(-500.0*factor, 500.0*factor, -500.0*factor, 500.0*factor);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0.375, 0.375, 0.0);
@@ -101,6 +105,38 @@ void mouse(int button, int state, int x, int y) {
 	state = state;
 	x = x;
 	y = y;
+
+	switch(button) {
+		case GLUT_LEFT_BUTTON:
+			printf("MOUSE LEFT(%d)\n", state);
+			break;
+
+		case GLUT_RIGHT_BUTTON:
+			printf("MOUSE RIGHT(%d)\n", state);
+			break;
+
+		case GLUT_MIDDLE_BUTTON:
+			printf("MOUSE MIDDLE(%d)\n", state);
+			break;
+
+		case 3:
+			printf("MOUSE WHEEL UP(%d)\n", state);
+			factor *= 1.01;
+			printf("V(%.1f)\n", factor*500.0);
+			reshape(1000, 1000);
+			break; 
+
+		case 4:
+			printf("MOUSE WHEEL DOWN(%d)\n", state);
+			factor *= 0.99;
+			printf("V(%.1f)\n", factor*500.0);			
+			reshape(1000, 1000);
+			break;
+
+		default:
+			printf("MOUSE ?%d (%d)\n", button, state);
+			break;
+	}
 }
 
 void init(void) {

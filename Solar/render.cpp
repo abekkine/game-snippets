@@ -26,8 +26,10 @@ void render() {
     // Needed to refresh light position after matrix operations.
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
+    glDisable(GL_LIGHTING);
     glColor3f(1.0, 1.0, 1.0);
     drawPlanet(sun.x, sun.y, sun.a, true);
+    glEnable(GL_LIGHTING);
 
     for(int i=0; i<NUM_PLANETS; i++) {
         if( i==selected_planet ) {

@@ -98,7 +98,7 @@ void model_update() {
             if( angle < 0.0 && angle >= -180.0 ) {
                 angle += 360.0;
             }             
-            printf("a(% 3.0f)\n", angle);
+            //printf("a(% 3.0f)\n", angle);
         } 
     }
 }
