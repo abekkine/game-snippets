@@ -89,16 +89,21 @@ void Universe::Update( double timeStep )
     }
 
     BodyVectorType::iterator iBody;
+    double waveTimer = 0.0;
     for( iBody=bodies.begin(); iBody!=bodies.end(); ++iBody )
     {
         (*iBody)->Update( timeStep );
 
-        Wave *new_wave = new Wave( *iBody );
-        if( fWaveColorCommand )
-        {
-            new_wave->SetColor( waveColor );
-        }
-        waves.push_back( new_wave );
+/*        waveTimer += timeStep;
+        if (waveTimer >= Wave::WAVE_SPAWN_PERIOD) {
+            waveTimer = 0.0f;
+            Wave *new_wave = new Wave( *iBody );
+            if( fWaveColorCommand )
+            {
+                new_wave->SetColor( waveColor );
+            }
+            waves.push_back( new_wave );
+        }*/
     }
 
     if( fWaveColorCommand )
@@ -220,6 +225,8 @@ Vector Universe::GetNewtonianGravity( Body* body, Wave* wave )
     distanceVector = wave->GetCenter() - body->GetPosition();
     distance = ~distanceVector;
 
+
+/*
     if( distance > deadzone )
     {
         squareDistance = distance * distance;
@@ -230,6 +237,15 @@ Vector Universe::GetNewtonianGravity( Body* body, Wave* wave )
     {
         gravityVector.Set( 0.0, 0.0, 0.0 );
     }
+*/
+    squareDistance = distance * distance;
+    gravityForce = Universe::conGravity * wave->Mass() / squareDistance;
+    if( distance <= deadzone )
+    {
+        gravityForce *= 0.1;
+    }
+    gravityVector = (!distanceVector) * gravityForce;
+    gravityVector.Set( 0.0, 0.0, 0.0 );
 
     return gravityVector;
 }
