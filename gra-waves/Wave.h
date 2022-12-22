@@ -26,6 +26,7 @@ public:
 public:
     static Scalar WAVE_LIFETIME;
     static Scalar WAVE_SPEED;
+    static Scalar WAVE_SPAWN_PERIOD;
     static unsigned int WAVE_DEFAULTCOLOR;
     static Scalar WAVE_ALPHAFACTOR;
 private:
